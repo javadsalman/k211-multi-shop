@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% load i18n %}
+
+{% block title %}
+    <title>Login</title>
+{% endblock title %}
+
+
+{% block main %}
+    <div class="container">
+        <div class="form-wrapper row p-5">
+            <div class="col-8 offset-2 bg-warning p-4 px-5">
+                <div class="display-3 text-dark text-center pb-2 font-weight-bold">Login</div>
+                {% if fail %}
+                    <div class="alert alert-danger text-center" role="alert">
+                        Istifadəçi adı və ya şifrə yanlışdır!
+                    </div>
+                {% endif %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="control-group">
+                        <input type="text" class="form-control" placeholder="Username"
+                            required="required" name="username" />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="control-group">
+                        <input type="password" class="form-control" placeholder="Password"
+                            required="required" name="password" />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="row">
+                        <div class="control-group col-6">
+                            <input id="remember" type="checkbox" name="remember" value="off">
+                            <label for="remember">{% trans "Remember Me" %}</label>
+                        </div>
+                        <div class="col-6 text-right">
+                            <a href="{% url 'customer:forgot-password' %}" class=" text-dark">Forgot Password</a>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-dark py-2 px-4" type="submit" id="sendMessageButton">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock main %}

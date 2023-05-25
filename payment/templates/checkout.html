@@ -1,0 +1,139 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>Checkout</title>
+{% endblock title %}
+
+
+{% block main %}
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="#">Home</a>
+                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                    <span class="breadcrumb-item active">Checkout</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Checkout Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-lg-8">
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
+                <form id="order-form" class="bg-light p-30 mb-2" method="POST">
+                    {% for error in form.non_field_errors %}
+                        <div class="text-danger">Formda problem yaranir</div>
+                    {% endfor %}
+                    <div class="row">
+                        {% csrf_token %}
+                        <div class="col-md-6 form-group">
+                            <label>First Name</label>
+                            {{form.first_name}}
+                            {% for error in form.first_name.errors %}
+                                <small class="text-danger">{{error}}</small>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Last Name</label>
+                            {{form.last_name}}
+                            {% for error in form.last_name.errors %}
+                                <small class="text-danger">{{error}}</small>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>E-mail</label>
+                            {{form.email}}
+                            {% for error in form.email.errors %}
+                                <small class="text-danger">{{error}}</small>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Mobile No</label>
+                            {{form.mobile}}
+                            {% for error in form.mobile.errors %}
+                                <small class="text-danger">{{error}}</small>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Address Line 1</label>
+                            {{form.address}}
+                            {% for error in form.address.errors %}
+                                <small class="text-danger">{{error}}</small>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Country</label>
+                            {{form.country}}
+                            {% for error in form.country.errors %}
+                                <small class="text-danger">{{error}}</small>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>City</label>
+                            {{form.city}}
+                            {% for error in form.city.errors %}
+                                <small class="text-danger">{{error}}</small>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>ZIP Code</label>
+                            {{form.zip_code}}
+                            {% for error in form.zip_code.errors %}
+                                <small class="text-danger">{{error}}</small>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </form>
+                <div class="mb-1">
+                    <div class="bg-light p-30">
+                        <button onclick="console.log('asdfasdf'); document.querySelector('#order-form').submit();" class="btn btn-block btn-primary font-weight-bold py-3">Place Order</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
+                <div class="bg-light p-30 mb-5">
+                    <div class="border-bottom">
+                        <h6 class="mb-3">Products</h6>
+                        {% for basket in basketlist %}
+                            <div class="d-flex justify-content-between">
+                                <p>{{basket.product.title}}</p>
+                                <p>${{basket.product.price}}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="border-bottom pt-3 pb-2">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h6>Subtotal</h6>
+                            <h6>${{all_price}}</h6>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-medium">Shipping</h6>
+                            <h6 class="font-weight-medium">${{shipping_price}}</h6>
+                        </div>
+                        {% if coupon_status == 'valid' %}
+                            <div class="d-flex justify-content-between">
+                                <h6 class="font-weight-medium">Discount</h6>
+                                <h6 class="font-weight-medium">- ${{coupon_discount_amount}} ({{coupon_discount}}%)</h6>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="pt-2">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5>Total</h5>
+                            <h5>${{final_price}}</h5>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Checkout End -->
+{% endblock main %}

@@ -1,0 +1,167 @@
+{% extends 'layout.html' %}
+{% load i18n %}
+{% load cache %}
+
+{% block title %}
+    <title>{% trans "MultiShop - Find online what you exactly want and wear." %}</title>
+{% endblock title %}
+
+{% block meta_tags %}
+    <meta name="keywords" content="clotches, shop online">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Discover the latest fashion trends at multishop, your one-stop destination for stylish clothing. Shop our extensive collection of all types for men, women, and children at unbeatable prices. Get discount deals, fast shipping, and hassle-free returns. Browse now and put together your perfect outfit today.">
+    <meta property="og:title" content="Ana Səhifə - Compar Academy İxtisaslaşmış Tədris Mərkəzi">
+    <meta property="og:description" content="Məqsədimiz tədrisini etdiyimiz sahələrə marağı olan insanlara motivasiya vermək, düzgün istiqamətləndirmək və gələcəklərinə müsbət təsir göstərməkdir.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://compar.edu.az/az/">
+    <meta property="og:image" content="/staticfiles/defaults/img/compar%20logo1%402x.png">
+{% endblock meta_tags %}
+
+{% block main %}
+    <!-- Carousel Start -->
+    {% cache 15 home_slider %}
+        <div class="container-fluid mb-3">
+            <div class="row px-xl-5">
+                <div class="col-lg-8">
+                    <div id="header-carousel" class="carousel slide carousel-fade mb-30 mb-lg-0" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li data-target="#header-carousel" data-slide-to="0" class="active"></li>
+                            <li data-target="#header-carousel" data-slide-to="1"></li>
+                            <li data-target="#header-carousel" data-slide-to="2"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            {% for campaign in slide_campaigns %}
+                                <div class="carousel-item position-relative {% if forloop.first %}active{% endif %}" style="height: 430px;">
+                                    <img class="position-absolute w-100 h-100" src="{{campaign.image.url}}" style="object-fit: cover;">
+                                    <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                                        <div class="p-3" style="max-width: 700px;">
+                                            <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">{{campaign.title}}</h1>
+                                            <p class="mx-md-5 px-5 animate__animated animate__bounceIn">{{campaign.description}}</p>
+                                            <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="#">Shop Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    {% for campaign in nonslide_campaigns|slice:"0:2" %}
+                        <div class="product-offer mb-30" style="height: 200px;">
+                            <img class="img-fluid" src="{{campaign.image.url}}" alt="">
+                            <div class="offer-text">
+                                <h6 class="text-white text-uppercase">{% trans "Save" %} {{campaign.discount_percent|floatformat}}%</h6>
+                                <h3 class="text-white mb-3">{{campaign.title}}</h3>
+                                <a href="" class="btn btn-primary">{% trans "Shop Now" %}</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endcache %}
+    
+    <!-- Carousel End -->
+
+
+    <!-- Featured Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5 pb-3">
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+                    <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
+                    <h5 class="font-weight-semi-bold m-0">{% trans "Quality Product" %}</h5>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+                    <h1 class="fa fa-shipping-fast text-primary m-0 mr-2"></h1>
+                    <h5 class="font-weight-semi-bold m-0">{% trans "Free Shipping" %}</h5>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+                    <h1 class="fas fa-exchange-alt text-primary m-0 mr-3"></h1>
+                    <h5 class="font-weight-semi-bold m-0">{% trans "14-Day Return" %}</h5>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+                    <h1 class="fa fa-phone-volume text-primary m-0 mr-3"></h1>
+                    <h5 class="font-weight-semi-bold m-0">{% trans "24/7 Support" %}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Featured End -->
+
+
+    <!-- Categories Start -->
+    <div class="container-fluid pt-5">
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Categories</span></h2>
+        <div class="row px-xl-5 pb-3">
+            {% for category in categories %}
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                    <a class="text-decoration-none" href="">
+                        <div class="cat-item d-flex align-items-center mb-4">
+                            <div class="overflow-hidden" style="width: 100px; height: 100px;">
+                                <img class="img-fluid" src="{{category.image.url}}" alt="">
+                            </div>
+                            <div class="flex-fill pl-3">
+                                <h6>{{category.title}}</h6>
+                                <small class="text-body">{{category.product_count}} {% trans "Products" %}</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- Categories End -->
+
+
+    <!-- Products Start -->
+    <div class="container-fluid pt-5 pb-3">
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Featured Products</span></h2>
+        <div class="row px-xl-5">
+            {% for product in featured_products %}
+                {% include 'includes/product-cart.html' with product=product %}
+            {% endfor %}
+        </div>
+    </div>
+    <!-- Products End -->
+
+
+    <!-- Offer Start -->
+    <div class="container-fluid pt-5 pb-3">
+        <div class="row px-xl-5">
+            {% for campaign in nonslide_campaigns|slice:"2:" %}
+                <div class="col-md-6">
+                    <div class="product-offer mb-30" style="height: 300px;">
+                        <img class="img-fluid" src="{{campaign.image.url}}" alt="">
+                        <div class="offer-text">
+                            <h6 class="text-white text-uppercase">{% trans "Save" %} {{campaign.discount_percent}}%</h6>
+                            <h3 class="text-white mb-3">{{campaign.title}}</h3>
+                            <a href="" class="btn btn-primary">{% trans "Shop Now" %}</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- Offer End -->
+
+
+    <!-- Products Start -->
+    <div class="container-fluid pt-5 pb-3">
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Recent Products</span></h2>
+        <div class="row px-xl-5">
+            {% for product in recent_products %}
+                {% include 'includes/product-cart.html' with product=product %}
+            {% endfor %}
+        </div>
+    </div>
+    <!-- Products End -->
+
+
+{% endblock main %}

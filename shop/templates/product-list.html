@@ -1,0 +1,126 @@
+{% extends 'layout.html' %}
+{% load shop_helper %}
+
+{% block title %}
+    <title>Products</title>
+{% endblock title %}
+
+
+{% block main %}
+     <!-- Breadcrumb Start -->
+     <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="#">Home</a>
+                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                    <span class="breadcrumb-item active">Shop List</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Shop Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <!-- Shop Sidebar Start -->
+            <aside class="col-lg-3 col-md-4">
+                <!-- Price Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h5>
+                <div class="bg-light p-4 mb-30 row">
+                    <input name="min_price"  class="form-control mb-2" type="number" placeholder="Min">
+                    <input name="max_price" class="form-control mb-2" type="number" placeholder="Max">
+                </div>
+                <!-- Price End -->
+                
+                <!-- Color Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by color</span></h5>
+                <div class="bg-light p-4 mb-30">
+                    {% for color in colors %}
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input name="colors" value="{{color.id}}" type="checkbox" class="custom-control-input" id="color-{{color.id}}">
+                            <label class="custom-control-label" for="color-{{color.id}}">{{color.title}}</label>
+                            <span class="badge border font-weight-normal">{{color.product_count}}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- Color End -->
+
+                <!-- Size Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by size</span></h5>
+                <div class="bg-light p-4 mb-30">
+                    {% for size in sizes %}
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input name="sizes" value="{{size.id}}" type="checkbox" class="custom-control-input" id="size-{{size.id}}">
+                            <label class="custom-control-label" for="size-{{size.id}}">{{size.title}}</label>
+                            <span class="badge border font-weight-normal">{{size.product_count}}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- Size End -->
+                <button class="btn btn-primary w-100 py-2">Axtar</button>
+            </aside>
+            <!-- Shop Sidebar End -->
+
+
+            <!-- Shop Product Start -->
+            <main class="col-lg-9 col-md-8">
+                <div class="row pb-3">
+                    <div class="col-12 pb-1">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div>
+                                <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
+                                <button class="btn btn-sm btn-light ml-2"><i class="fa fa-bars"></i></button>
+                            </div>
+                            <div class="ml-2">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Sorting</button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="{% get_querystring request 'sorting' '' %}">Latest</a>
+                                        <a class="dropdown-item" href="{% get_querystring request 'sorting' 'title' %}">Alphabetically</a>
+                                        <a class="dropdown-item" href="{% get_querystring request 'sorting' '-price' %}">Price</a>
+                                        <a class="dropdown-item" href="{% get_querystring request 'sorting' '-avg_star' %}">Rating</a>
+                                    </div>
+                                </div>
+                                <div class="btn-group ml-2">
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Showing</button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="{% get_querystring request 'page_by' 3 %}">3</a>
+                                        <a class="dropdown-item" href="{% get_querystring request 'page_by' 6 %}">6</a>
+                                        <a class="dropdown-item" href="{% get_querystring request 'page_by' 9 %}">9</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        {% for product in products %}
+                            {% include 'includes/product-cart.html' with product=product custom_class='col-lg-4 col-md-4 col-sm-6 pb-1' %}
+                        {% endfor %}
+                    <div class="col-12">
+                        <nav>
+                          <ul class="pagination justify-content-center">
+                            {% if page.has_previous %}
+                                <li class="page-item"><a class="page-link" href="{% get_querystring request 'page' page.previous_page_number %}">Previous</span></a></li>
+                            {% else %}
+                                <li class="page-item disabled"><a class="page-link" href="#">Previous</span></a></li>
+                            {% endif %}
+                            {% for page_number in paginator.page_range %}
+                                <li class="page-item {% if page_number == page.number %}active{% endif %}"><a class="page-link" href="{% get_querystring request 'page' page_number %}">{{page_number}}</a></li>
+                            {% endfor %}
+                            {% if page.has_next %}
+                                <li class="page-item"><a class="page-link" href="{% get_querystring request 'page' page.next_page_number %}">Next</span></a></li>
+                            {% else %}
+                                <li class="page-item disabled"><a class="page-link" href="#">Next</span></a></li>
+                            {% endif %}
+                          </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!-- Shop Product End -->
+        </div>
+    </div>
+    <!-- Shop End -->
+{% endblock main %}
